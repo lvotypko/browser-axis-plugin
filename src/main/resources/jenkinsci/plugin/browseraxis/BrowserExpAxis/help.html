@@ -1,0 +1,6 @@
+<div>
+    Write expression for browser. Variable DISPLAY should be set for Linux slaves, it can be created by using Xvnc plugin (Check "Run Xvnc during build" option in Build Environment section). 
+    It sets system variable BROWSER_AXIS_PATH which contains path to the chosen browser file and adds this path to the PATH expression as its first part.
+    This axis is for setting the browser more generally. There can be set more versions of browser (firefox-8||firefox-5) or types of browsers(firefox||chrome).
+    This axis enable set only expression for browsers - it is not for all labels (for example you can write firefox||explorer, but you can not write firefox&&linux). For non-browser labels, please use label expression or slave options.
+</div>

@@ -1,0 +1,55 @@
+
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    
+    <f:section title="${descriptor.displayName}">
+        <f:entry title="${descriptor.displayName}" description="${descriptor.displayName}">
+            <f:repeatable name="browser" var="instance" items="${descriptor.browsers}"
+                    add="Add browser" header="${descriptor.displayName}">
+                <j:set var="toolDescriptor" value="${descriptor}" /><!-- to make this descriptor accessible from properties -->
+                <table width="100%">
+                    <f:entry title="Name" field="name">
+                        <f:textbox/>
+                    </f:entry>
+                    <f:optionalBlock field="autoCreatingVersionsWindows" title="Autecreating versions for default path on Windows systems" inline="true"> 
+                        <f:entry title="Default path" field="defaultPathWindows">
+                            <f:textbox/>
+                        </f:entry>
+                        <f:entry title="Command for version of browser" field="findVersionCommandWindows">
+                            <f:textbox/>
+                        </f:entry>
+                    </f:optionalBlock>
+                    <f:optionalBlock field="autoCreatingVersionsUnix" title="Autecreating versions for default path on Unix systems" inline="true"> 
+                        <f:entry title="Default path" field="defaultPathUnix">
+                            <f:textbox/>
+                        </f:entry>
+                        <f:entry title="Command for version of browser" field="findVersionCommandUnix">
+                            <f:textbox/>
+                        </f:entry>
+                    </f:optionalBlock>
+                    <f:optionalBlock field="useSuffixs" title="Use suffix for version path" inline="true"> 
+                        <f:entry title="Suffix for Unixs" field="suffixUnix">
+                            <f:textbox default="-bin"/>
+                        </f:entry>
+                        <f:entry>
+                            <j:forEach var="osName" items="${descriptor.getUnixOs()}">
+                                <f:checkbox name="values" json="${osName}" checked="${instance.unixForSuffix.contains(osName)}" title="${osName}" />
+                                <st:nbsp/>
+                            </j:forEach>
+                        </f:entry>
+                        <f:entry title="Suffix for Windows" field="suffixWindows">
+                            <f:textbox default=".exe"/>
+                        </f:entry>
+                    </f:optionalBlock>
+                    <st:include page="config.jelly" from="${descriptor}" class="${descriptor.clazz}"/>
+                    <f:descriptorList descriptors="${descriptor.propertyDescriptors}" field="properties"/>
+                    <f:entry title="">
+                        <div align="right">
+                            <f:repeatableDeleteButton value="delete browser"/>
+                        </div>
+                    </f:entry>
+                </table>
+            </f:repeatable>
+        </f:entry>     
+    </f:section>
+
+</j:jelly>

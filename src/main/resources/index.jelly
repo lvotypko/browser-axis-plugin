@@ -1,0 +1,4 @@
+<div>
+  This plugin add browser axis and browser expression axis. 
+  It is created for selenim tests - adds path of chosen browser to system path and create BROWSER_AXIS_PATH system varible for build.
+</div>
