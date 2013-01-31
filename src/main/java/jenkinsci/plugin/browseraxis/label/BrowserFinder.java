@@ -26,15 +26,10 @@ import jenkinsci.plugin.browseraxis.Browser;
 public class BrowserFinder extends LabelFinder {
 
     private Map<String, Long> nodeActualization = new TreeMap<String, Long>();
-    private static Set<FindBrowsersOnNode> threads = new HashSet<FindBrowsersOnNode>();
 
     public BrowserFinder() {
-        threads = new HashSet<FindBrowsersOnNode>();
     }
 
-    public static Set<FindBrowsersOnNode> getThreads() {
-        return threads;
-    }
 
     public void actualizeNode(String nodeName, long time) {
         nodeActualization.put(nodeName, time);
@@ -51,20 +46,19 @@ public class BrowserFinder extends LabelFinder {
 
     public void doBrowserActualization(Node node) {
         String threadName = "browsers for " + node.getDisplayName();
-        for (FindBrowsersOnNode t : threads) {
-            if (node.equals(t.getNode())) {
+        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+        for (Thread t : threads) {
+            if (threadName.equals(t.getName()) && t instanceof FindBrowsersOnNode){
                 // Do not create another thread for task which is proccessed
-                if ((t.getStartTime() + 300000l) < System.currentTimeMillis()) {
+                if ((((FindBrowsersOnNode)t).getStartTime() + 300000l) < System.currentTimeMillis()) {
                     Logger.getLogger(BrowserFinder.class.getName()).log(Level.SEVERE, ("Thread created by Browser plugin to find browsers for node " + node.getDisplayName() + " is time out"));
                     t.interrupt(); // try to interupt thread which run too long 
-                    threads.remove(t);
                 }
                 return;
             }
         }
             FindBrowsersOnNode thread = new FindBrowsersOnNode(threadName, System.currentTimeMillis(), node);
             thread.start();
-            threads.add(thread);
     }
 
     @Override

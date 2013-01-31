@@ -24,6 +24,7 @@ import hudson.model.Hudson;
 import hudson.model.LabelFinder;
 import hudson.model.Node;
 import hudson.model.labels.LabelAtom;
+import java.util.concurrent.ConcurrentHashMap;
 import jenkinsci.plugin.browseraxis.label.BrowserFinder;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -218,7 +219,7 @@ public class Browser implements Describable<Browser>, Comparable {
         private static Set<String> unixOS = new TreeSet<String>();
         // Name of slaves and their browser labels
         // Map of slaves nad thir browser labels are saved here for performance purposes.
-        private Map<String, Set<String>> slaveLabels = new TreeMap<String, Set<String>>();
+        private Map<String, Set<String>> slaveLabels = new ConcurrentHashMap<String, Set<String>>();
 
         public DescriptorImpl() {
             load();

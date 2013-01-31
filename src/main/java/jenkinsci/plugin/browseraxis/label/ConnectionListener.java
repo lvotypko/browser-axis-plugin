@@ -20,14 +20,13 @@ public class ConnectionListener extends ComputerListener {
 
     @Override
     public void onOnline(Computer computer) {
-        Node node = computer.getNode();
-        for (FindBrowsersOnNode t : BrowserFinder.getThreads()) {
-            if (node.equals(t.getNode()))
-                return;
-        }
         String threadName = "browsers for " + computer.getNode().getDisplayName();
-        FindBrowsersOnNode finder =  new FindBrowsersOnNode(threadName, System.currentTimeMillis(), node);
+        for (Thread t : Thread.getAllStackTraces().keySet()) {
+            if (threadName.equals(t.getName()) && t instanceof FindBrowsersOnNode){
+                return;
+            }
+        }
+        FindBrowsersOnNode finder =  new FindBrowsersOnNode(threadName, System.currentTimeMillis(), computer.getNode());
         finder.start();
-        BrowserFinder.getThreads().add(finder);
     }
 }

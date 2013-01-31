@@ -13,6 +13,7 @@ import hudson.slaves.SlaveComputer;
 import hudson.tasks.Shell;
 import hudson.util.StreamTaskListener;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
@@ -94,7 +95,7 @@ public class FindBrowsersOnNode extends Thread {
             }
         }
         descriptor.save();
-        BrowserFinder.getThreads().remove(this);
+        //BrowserFinder.getThreads().remove(this);
         node.getAssignedLabels();
     }
 
